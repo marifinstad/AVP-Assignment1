@@ -1,3 +1,5 @@
+import random
+import numpy as np
 
 #### DETTE ER CONATINERE #####
 def NewContainer(id, length, cargo):
@@ -42,4 +44,48 @@ def setWeigthContainer(container, weight):
 def setCargoContainer(container, cargo):
     container[3] = cargo
 
+
+containers = []
+
+def addContainer(container):
+    containers.append(container)
+
+def removeContainer(container):
+    if len(containers) != 0:
+        containers.remove(container)
+    else:
+        return "No containers available"
+
+def findContainer(container):
+    if container in containers:
+        return True
+    else:
+        return False
+
+def checkID(id):
+    for i in containers:
+        if i[0] == id:
+            return True
+    else: 
+        return False
+
+def randomContainers(conatiners):
+    for i in range (0,20):
+        container = [0,0,0,0]
+        id = random.randint(0,10000)
+        if checkID(id) == False:
+            setIdContainer(container, id)
+            cargo = random.randint(0,23)
+            setCargoContainer(container,cargo)
+            weight = random.randrange(2,5,2)
+            setWeigthContainer(container,weight)
+            if weight == 2:
+                length = 20
+            else:
+                length = 40
+            setLengthContainer(container,length)
+        addContainer(container)
+    return containers
+
 ### DETT ER SHIPS #####
+
