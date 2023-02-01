@@ -2,7 +2,7 @@ import random
 
 
 #### DETTE ER CONATINERE #####
-def NewContainer(id, length, cargo):
+def NewContainer(id, length, cargo): #skal man ta inn en weight her også?
     #cargo er mengen av materialet den har med
     #listen med containere blir  [id, length, wighth, cargo]
     if cargo < 0 or cargo > 23: 
@@ -87,6 +87,95 @@ def randomContainers(containers):
         addContainer(container)
     return containers
 
+def getContainerTotalWeight(container):
+    return getWeigtContainer(container) + getCargoContainer(container)
+
+
+
+### DETT ER SHIPS #####
+
+def NewShip(length, width, height):
+    return [length, width, height, containers]
+
+#gettere
+def getLengthShip(ship):
+    return ship[0]
+
+def getWidthShip(ship):
+    return ship[1]
+
+def getHeightShip(ship):
+    return ship[2]
+
+def getShipContainers(ship):
+    return ship[3]
+
+#settere
+def setLengthShip(ship, length):
+    ship[0] = length
+
+def setWidthShip(ship, width):
+    ship[1] = width
+
+def setHeightShip(ship, height):
+    ship[2] = height
+
+def numberOfContainersShips(ship):
+    return len(getShipContainers(ship))
+
+def getRandomContainer(ship, i):
+    return containers[i]
+
+def insertContainerOnShip(ship, container, i):
+    containers.insert(i, container)
+
+def appendContainerOnShip(shop, container):
+    containers.append(container)
+
+def loadContainerOnShip(ship, newContainer):
+    newContainerWeight = getContainerTotalWeight(newContainer)
+    loaded = False
+    i = 0
+    while i < numberOfContainersShips(ship):
+        container = getRandomContainer(ship, i)
+        containerWeight = getContainerTotalWeight(container)
+        if containerWeight <= newContainerWeight:
+            insertContainerOnShip(ship, newContainer, i)
+            loaded = True
+            break
+        i = i + 1
+    if not loaded:
+        appendContainerOnShip(ship, newContainer)
+
+def appendContainerOnShip(ship, container):
+    containers.append(container)
+
+def removeContainerFromShip(ship):
+    if numberOfContainersShips() != 0:
+        containers.pop()
+    return 
+
+def getLastContainerOnShip(ship):
+    if numberOfContainersShips != 0:
+        return containers[-1]
+    return None
+
+ship = NewShip(23, 22, 18)
+c1 = NewContainer(1000, 20, 5)
+c2 = NewContainer(1010, 40, 9)
+c3 = NewContainer(1100, 20, 10)
+c4 = NewContainer(1001, 40, 20)
+
+loadContainerOnShip(ship, c1)
+loadContainerOnShip(ship, c2)
+loadContainerOnShip(ship, c3)
+loadContainerOnShip(ship, c4)
+
+print("------")
+print(ship)
+
+
+### PRINT ###
 
 #Lage det om til filformat
 def fileFormatContainer(container):
@@ -108,8 +197,6 @@ def writeToFile(containers):
         fil.close()
     except:
         print("Could not write to file")
-
-### DETT ER SHIPS #####
 
 #Dette er en test 
 randomContainers(containers)
