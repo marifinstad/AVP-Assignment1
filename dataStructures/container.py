@@ -87,5 +87,13 @@ def randomContainers(conatiners):
         addContainer(container)
     return containers
 
+
+#Lage det om til filformat
+def fileFormatContainer(container):
+    # id,lengde,egenvekt,loadvekt,totalvekt
+    return str(container[0])+","+str(container[1])+","+str(container[2])+","+container[3]+","+str(getTotalWeightContainer(container))
+
+
+
 ### DETT ER SHIPS #####
 
