@@ -1,5 +1,5 @@
 import random
-import numpy as np
+
 
 #### DETTE ER CONATINERE #####
 def NewContainer(id, length, cargo):
