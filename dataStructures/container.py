@@ -96,12 +96,12 @@ def fileFormatContainer(container):
 #skrive til fil
 def writeToFile(containers):
     try:
-        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/dataStructures/load.csv", "r")
+        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/dataStructures/load.csv", "r") ### NOE SKURRER
         fil.close()
     except:
         print("Could not read file")
     try:
-        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/dataStructures/load.csv", "a")
+        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/dataStructures/load.csv", "a") #### NOE SKURRER
         for container in containers:
             el = fileFormatContainer(container)
             fil.write(el)
@@ -113,4 +113,6 @@ def writeToFile(containers):
 
 #Dette er en test 
 randomContainers(containers)
+for el in containers:
+    print(fileFormatContainer(el))
 writeToFile(containers)
