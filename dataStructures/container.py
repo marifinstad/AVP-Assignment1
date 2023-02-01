@@ -69,7 +69,7 @@ def checkID(id):
     else: 
         return False
 
-def randomContainers(conatiners):
+def randomContainers(containers):
     for i in range (0,20):
         container = [0,0,0,0]
         id = random.randint(0,10000)
@@ -91,9 +91,26 @@ def randomContainers(conatiners):
 #Lage det om til filformat
 def fileFormatContainer(container):
     # id,lengde,egenvekt,loadvekt,totalvekt
-    return str(container[0])+","+str(container[1])+","+str(container[2])+","+container[3]+","+str(getTotalWeightContainer(container))
+    return str(container[0])+","+str(container[1])+","+str(container[2])+","+str(container[3])+","+str(getTotalWeightContainer(container))
 
-
+#skrive til fil
+def writeToFile(containers):
+    try:
+        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/load.csv", "r")
+        fil.close()
+    except:
+        print("Could not read file")
+    try:
+        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/load.csv", "a")
+        for container in containers:
+            el = fileFormatContainer(container)
+            fil.write(el)
+        fil.close()
+    except:
+        print("Could not write to file")
 
 ### DETT ER SHIPS #####
 
+#Dette er en test 
+randomContainers(containers)
+writeToFile(containers)
