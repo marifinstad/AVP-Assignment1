@@ -96,12 +96,12 @@ def fileFormatContainer(container):
 #skrive til fil
 def writeToFile(containers):
     try:
-        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/load.csv", "r")
+        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/dataStructures/load.csv", "r")
         fil.close()
     except:
         print("Could not read file")
     try:
-        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/load.csv", "a")
+        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/dataStructures/load.csv", "a")
         for container in containers:
             el = fileFormatContainer(container)
             fil.write(el)
