@@ -29,7 +29,9 @@ def getCargoContainer(container):
     return container[3]
 #få tak i TOTALVEKT til container:
 def getTotalWeightContainer(container):
-    return getWeigtContainer(container) + getCargoContainer(container)
+    #return container[2] + container[3]
+    container[4] = getWeigtContainer(container) + getCargoContainer(container)
+    return container[4]
 
 #sette ID
 def setIdContainer(container, id):
@@ -43,6 +45,7 @@ def setWeigthContainer(container, weight):
 #sette cargo
 def setCargoContainer(container, cargo):
     container[3] = cargo
+
 
 
 containers = []
@@ -68,11 +71,15 @@ def checkID(id):
             return True
     else: 
         return False
+    
+# def getContainerTotalWeight(container):
+#     return getWeigtContainer(container) + getCargoContainer(container)
+
 
 def randomContainers(containers):
-    for i in range (0,20):
-        container = [0,0,0,0]
-        id = random.randint(0,10000)
+    for i in range (0,5):
+        container = [0,0,0,0,0]
+        id = random.randint(0,10000000)
         if checkID(id) == False:
             setIdContainer(container, id)
             cargo = random.randint(0,23)
@@ -84,12 +91,42 @@ def randomContainers(containers):
             else:
                 length = 40
             setLengthContainer(container,length)
+            getTotalWeightContainer(container)
         addContainer(container)
     return containers
 
-def getContainerTotalWeight(container):
-    return getWeigtContainer(container) + getCargoContainer(container)
+### PRINT CONTAINERS ###
 
+# #Lage det om til filformat
+def fileFormatContainer(container):
+     # id,lengde,egenvekt,loadvekt,totalvekt
+    return str(container[0])+" "+str(container[1])+" "+str(container[2])+" "+str(container[3])+" "+str(getTotalWeightContainer(container))
+
+#skrive til fil
+def writeContainersToFile(containers):
+    try:
+        with open("dataStructures/load.csv", "w") as fp:
+            for container in containers:
+                formatedContainer = fileFormatContainer(container)
+                fp.write("%s\n" % formatedContainer)
+            fp.close()
+    except:
+        print("Could not write to file")
+
+def readContainersFromFile(containers):
+#     with open("dataStructures/load.cvs", "r") as fp:
+#         for container in 
+    try:
+        # fil = open("dataStructures/load.csv", "r") ### NOE SKURRER
+        # fil.close()
+        with open("dataStructures/load.csv", "r") as fp:
+            container = fp.read()
+            list = [container.splitlines()]
+            for line in range(0, len(list)-1):
+                containers.append(line) 
+            fp.close()
+    except:
+        print("Could not read file")
 
 
 ### DETT ER SHIPS #####
@@ -129,16 +166,16 @@ def getRandomContainer(ship, i):
 def insertContainerOnShip(ship, container, i):
     containers.insert(i, container)
 
-def appendContainerOnShip(shop, container):
+def appendContainerOnShip(ship, container):
     containers.append(container)
 
 def loadContainerOnShip(ship, newContainer):
-    newContainerWeight = getContainerTotalWeight(newContainer)
+    newContainerWeight = getTotalWeightContainer(newContainer)
     loaded = False
     i = 0
     while i < numberOfContainersShips(ship):
         container = getRandomContainer(ship, i)
-        containerWeight = getContainerTotalWeight(container)
+        containerWeight = getTotalWeightContainer(container)
         if containerWeight <= newContainerWeight:
             insertContainerOnShip(ship, newContainer, i)
             loaded = True
@@ -160,46 +197,49 @@ def getLastContainerOnShip(ship):
         return containers[-1]
     return None
 
-ship = NewShip(23, 22, 18)
-c1 = NewContainer(1000, 20, 5)
-c2 = NewContainer(1010, 40, 9)
-c3 = NewContainer(1100, 20, 10)
-c4 = NewContainer(1001, 40, 20)
+### PRINT SHIPS ###
 
-loadContainerOnShip(ship, c1)
-loadContainerOnShip(ship, c2)
-loadContainerOnShip(ship, c3)
-loadContainerOnShip(ship, c4)
+# def fileFormatShip(ship):
+#      # id,lengde,egenvekt,loadvekt,totalvekt
+#     containerWeight = getTotalWeightContainer(ship[3])
+#     return containerWeight
 
-print("------")
-print(ship)
+# def writeShipsToFile(ship):
+#     try:
+#         with open("dataStructures/loadShip.tsv", "w") as fp:
+#             for container in ship:
+#                 formatedShip = fileFormatShip(container)
+#                 fp.write("%s\n" % formatedShip)
 
+#         fp.close()
+#     except:
+#         print("Could not write to file")
 
-### PRINT ###
+# ship = NewShip(23, 22, 18)
+# writeShipsToFile(ship)
 
-#Lage det om til filformat
-def fileFormatContainer(container):
-    # id,lengde,egenvekt,loadvekt,totalvekt
-    return str(container[0])+","+str(container[1])+","+str(container[2])+","+str(container[3])+","+str(getTotalWeightContainer(container))
-
-#skrive til fil
-def writeToFile(containers):
-    try:
-        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/dataStructures/load.csv", "r") ### NOE SKURRER
-        fil.close()
-    except:
-        print("Could not read file")
-    try:
-        fil = open("tpk4189-avanserte-verktoy-for-performance-engineering/dataStructures/load.csv", "a") #### NOE SKURRER
-        for container in containers:
-            el = fileFormatContainer(container)
-            fil.write(el)
-        fil.close()
-    except:
-        print("Could not write to file")
 
 #Dette er en test 
+
+#ship = NewShip(23, 22, 18)
+# c1 = NewContainer(1000, 20, 5)
+# c2 = NewContainer(1010, 40, 9)
+# c3 = NewContainer(1100, 20, 10)
+# c4 = NewContainer(1001, 40, 20)
+
+# loadContainerOnShip(ship, c1)
+# loadContainerOnShip(ship, c2)
+# loadContainerOnShip(ship, c3)
+# loadContainerOnShip(ship, c4)
+
+#print("------")
+#print(ship)
+
 randomContainers(containers)
 for el in containers:
-    print(fileFormatContainer(el))
-writeToFile(containers)
+     print(fileFormatContainer(el))
+writeContainersToFile(containers)
+print("----")
+readContainersFromFile(containers)
+print(containers)
+
