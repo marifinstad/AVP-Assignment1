@@ -190,12 +190,32 @@ def appendContainerOnShip(ship, container):
 def removeContainerFromShip(ship):
     if numberOfContainersShips() != 0:
         containers.pop()
-    return 
+    return containers
 
 def getLastContainerOnShip(ship):
     if numberOfContainersShips != 0:
         return containers[-1]
     return None
+
+def sortContainersWeight(containers):
+    containers.sort(key = lambda x: x[4])
+    return containers
+
+#pile 
+# while containersOnland =! 0 
+#  [floor[row[kolonne]]]
+# for floor in range (0,17):
+#    for row in range (0,21):
+#        for kolonne in range (0,22):
+#             if getLength(container) == 4:
+#             if kolonne == 21:
+#                  sjekke neste container 
+#            
+#             kolonne += 2
+
+
+
+
 
 ### PRINT SHIPS ###
 
@@ -236,6 +256,7 @@ def getLastContainerOnShip(ship):
 #print(ship)
 
 randomContainers(containers)
+sortContainersWeight(containers)
 for el in containers:
      print(fileFormatContainer(el))
 writeContainersToFile(containers)
