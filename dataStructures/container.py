@@ -245,7 +245,7 @@ def addContainerOnShip(ship,container):
     return True
 
 def findPlace(ship, container): #rowsene øker ikke. 
-    for i in range(getHeightShip(ship)-1):
+    for i in range(getHeightShip(ship)):
         deck = ship[4][i]
         if getLengthContainer(container) == 20:
             for j in range(getWidthShip(ship)):
@@ -288,6 +288,7 @@ sortContainersWeight(containers)
 for el in containers:
     print(el)
     print(addContainerOnShip(skip1,el))
+    print(findPlace(skip1,el))
 
 print(skip1[4])
 #print(skip1[4])
