@@ -1,7 +1,6 @@
 import random
 
-
-#### DETTE ER CONATINERE #####
+#TASK 1
 def NewContainer(id, length, cargo): #skal man ta inn en weight her også?
     #cargo er mengen av materialet den har med
     #listen med containere blir  [id, length, wighth, cargo]
@@ -46,7 +45,13 @@ def setWeigthContainer(container, weight):
 def setCargoContainer(container, cargo):
     container[3] = cargo
 
+#END OF TASK 1
 
+#TEST 1
+
+
+
+#TASK 2
 
 containers = []
 
@@ -72,10 +77,11 @@ def checkID(id):
     else: 
         return False
     
-# def getContainerTotalWeight(container):
-#     return getWeigtContainer(container) + getCargoContainer(container)
+#END OF TASK 2
+#TEST TASK 2
 
 
+#TASK 3
 def randomContainers(containers):
     for i in range (0,10):
         container = [0,0,0,0,0]
@@ -84,19 +90,28 @@ def randomContainers(containers):
             setIdContainer(container, id)
             cargo = random.randint(0,23)
             setCargoContainer(container,cargo)
-            weight = random.randrange(2,5,2)
-            setWeigthContainer(container,weight)
-            if weight == 2:
-                length = 20
-            else:
-                length = 40
+            #weight = random.randrange(2,5,2)
+            #setWeigthContainer(container,weight)
+            #if weight == 2:
+            #    length = 20
+            #else:
+            #    length = 40
+            length = 40
+            weight = 4
             setLengthContainer(container,length)
+            setWeigthContainer(container,weight)
             getTotalWeightContainer(container)
         addContainer(container)
     return containers
+#END OF TASK 3
 
-### PRINT CONTAINERS ###
+#TEST TASK 3
 
+print("----")
+#randomContainers(containers)
+#print(containers)
+
+#TASK 4
 # #Lage det om til filformat
 def fileFormatContainer(container):
      # id,lengde,egenvekt,loadvekt,totalvekt
@@ -105,7 +120,7 @@ def fileFormatContainer(container):
 #skrive til fil
 def writeContainersToFile(containers):
     try:
-        with open("load.csv", "w") as fp:
+        with open("dataStructures/load.csv", "w") as fp:
             for container in containers:
                 formatedContainer = fileFormatContainer(container)
                 fp.write("%s\n" % formatedContainer)
@@ -114,12 +129,8 @@ def writeContainersToFile(containers):
         print("Could not write to file")
 
 def readContainersFromFile(containers):
-#     with open("dataStructures/load.cvs", "r") as fp:
-#         for container in 
     try:
-        # fil = open("dataStructures/load.csv", "r") ### NOE SKURRER
-        # fil.close()
-        with open("load.csv", "r") as fp:
+        with open("dataStructures/load.csv", "r") as fp:
             container = fp.read()
             list = [container.splitlines()]
             for line in range(0, len(list)-1):
@@ -127,12 +138,20 @@ def readContainersFromFile(containers):
             fp.close()
     except:
         print("Could not read file")
+#END OF TASK 4
+
+#TEST TASK 4
+
+#writeContainersToFile(containers)
+#readContainersFromFile(containers)
 
 
+#TASK 5 
 ### DETT ER SHIPS #####
 
+#implement of a new ship
 def NewShip(length, width, height):
-    return [length, width, height, []]
+    return [length, width, height, [], dict()]
 
 #gettere
 def getLengthShip(ship):
@@ -147,6 +166,13 @@ def getHeightShip(ship):
 def getShipContainers(ship):
     return ship[3]
 
+def getRandomContainer(ship, i):
+    containers = getShipContainers(ship)
+    return containers[i]
+
+def getDictFromShip(ship):
+    return ship[4]
+
 #settere
 def setLengthShip(ship, length):
     ship[0] = length
@@ -160,15 +186,37 @@ def setHeightShip(ship, height):
 def numberOfContainersShips(ship):
     return len(getShipContainers(ship))
 
-def getRandomContainer(ship, i):
-    return containers[i]
 
+#støttefunksjoner til dictionary 
+
+#inserts the conatiner into the i index in the list and the dict 
 def insertContainerOnShip(ship, container, i):
-    containers.insert(i, container)
+    containers = getShipContainers(ship)
+    containers.insert(i,container)
+    addContainerToDict(ship,container)
 
 def appendContainerOnShip(ship, container):
-    containers.append(container)
+   cont = getShipContainers(ship)
+   cont.append(container)
+   addContainerToDict(ship,container)
 
+def lookForContainer(ship,id):
+    dict = getDictFromShip(ship)
+    return dict.get(id,None)
+
+def addContainerToDict(ship,container):
+    dict = getDictFromShip(ship)
+    id = getIdContainer(container)
+    dict[id] = container
+
+def removeContainerFromDict(ship,container):
+    dict = getDictFromShip(ship)
+    id = getIdContainer(container)
+    del dict[id]
+
+
+
+#loads the container onto the ship if it is lighter than the container under
 def loadContainerOnShip(ship, newContainer):
     newContainerWeight = getTotalWeightContainer(newContainer)
     loaded = False
@@ -184,118 +232,47 @@ def loadContainerOnShip(ship, newContainer):
     if not loaded:
         appendContainerOnShip(ship, newContainer)
 
-def appendContainerOnShip(ship, container):
-    containers.append(container)
+#checks if ship empty 
+def isEmptyShip(ship):
+    return numberOfContainersShips(ship) == 0
 
-def removeContainerFromShip(ship):
-    if numberOfContainersShips() != 0:
-        containers.pop()
-    return containers
+#add container to list on ship
+def addContainerToShip(ship,container):
+    cont = getShipContainers(ship)
+    cont.append(container)
+    addContainerToDict(ship, container)
 
+#add containers list to ship
+def addContainersToShip(ship, cont):
+    while len(cont) != 0:
+        container = cont.pop()
+        addContainerToShip(ship, container)
+
+#deletes container from list on ship
+def removeContainerFromShip(ship): #denne sletter den øverste containeren
+    if numberOfContainersShips(ship) != 0:
+        cont = getShipContainers(ship)
+        container = cont.pop()
+        removeContainerFromDict(ship,container)
+    return 
+
+#gets the container at the top of the list
 def getLastContainerOnShip(ship):
     if numberOfContainersShips != 0:
         return containers[-1]
     return None
 
-def sortContainersWeight(containers):
-    containers.sort(key = lambda x: x[4])
-    return containers
+def removeLighterContainers(ship, weight):
+    removedContainers = []
+    while not isEmptyShip(ship):
+        container = getLastContainerOnShip(ship)
+        totalWeight = getTotalWeightContainer(container)
+        if totalWeight >= weight:
+            break
+        removeContainer(ship)
+        removedContainers.append(container)
+    return removedContainers
 
-#pile 
-# while containersOnland =! 0 
-#  [floor[row[kolonne]]]
-# for floor in range (0,17):
-#    for row in range (0,21):
-#        for kolonne in range (0,22):
-#             if getLength(container) == 4:
-#             if kolonne == 21:
-#                  sjekke neste container 
-#            
-#             kolonne += 2
-
-def makeDeck(ship):
-    floor = [[[None]*getWidthShip(ship)]*getLengthShip(ship)]
-    for i in range(getHeightShip(ship)-1):
-        deck = []
-        for j in range(getLengthShip(ship)):
-            deck.append([])
-            for k in range(getWidthShip(ship)):
-                deck[j].append(0)
-        floor.append(deck)
-    ship.append(floor)
-    
-def addContainerOnShip(ship,container):
-    place = findPlace(ship,container)
-    if place == False:
-        return False
-    ship[3].append(container)
-    id = getIdContainer(container)
-    deck = place[0][0]
-    row = place[0][1]
-    position1 = place[0][2]
-    if len(place) == 2:
-        position2 = place[1][2]
-        ship[4][deck][row][position1] = id
-        ship[4][deck][row][position2] = id
-    elif len(place) == 1:
-        ship[4][deck][row][position1] = id
-    else: 
-        return False
-
-    return True
-
-def findPlace(ship, container): #rowsene øker ikke. 
-    for i in range(getHeightShip(ship)):
-        deck = ship[4][i]
-        if getLengthContainer(container) == 20:
-            for j in range(getWidthShip(ship)):
-                row = deck[j]
-                for k in range(getLengthShip(ship)-1):
-                    position = row[k]
-                    if position == 0 and isContainerBelow(ship, (i, j, k)):
-                       return [[i, j, k]] #doble lister fordi den kjører på to elementer   
-        elif getLengthContainer(container) == 40:
-            for j in range(getWidthShip(ship)):
-                row = deck[j]
-                for k in range(getLengthShip(ship)-2):
-                    position1 = row[k]
-                    position2 = row[k+1]
-                    if (position1 == 0 and position2 == 0 and isContainerBelow(ship, (i,j,k)) and isContainerBelow(ship, (i,j,k+1))):
-                        return [[i, j, k],[i, j, k+1]] 
-        else:
-            return False  
-
-
-def isContainerBelow(ship, position):
-    deck = position[0]
-    row = position[1]
-    place = position[2]
-    positionBelow = ship[4][deck-1][row][place]
-    if deck == 0:
-        return True
-    elif positionBelow == 0: #there is nothing under here 
-        return False
-    else: 
-        return True
-
-
-randomContainers(containers)
-skip1 = NewShip(6,5,4)
-makeDeck(skip1)
-#print(ship[4][el[0]][el[1]][el[2]])
-sortContainersWeight(containers)
-#containers.reverse()
-for el in containers:
-    print(el)
-    print(addContainerOnShip(skip1,el))
-    print(findPlace(skip1,el))
-
-print(skip1[4])
-#print(skip1[4])
-#con = NewContainer(1111,40,3)
-#con1 = NewContainer(1234, 20, 2)
-#print(addContainerOnShip(skip1, con1))
-#print(findPlace(skip1,con))
 
 
 
