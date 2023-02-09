@@ -214,7 +214,7 @@ def sortContainersWeight(containers):
 #             kolonne += 2
 
 def makeDeck(ship):
-    floor = [[[0]*getWidthShip(ship)]*getLengthShip(ship)]
+    floor = [[[None]*getWidthShip(ship)]*getLengthShip(ship)]
     for i in range(getHeightShip(ship)-1):
         deck = []
         for j in range(getLengthShip(ship)):
@@ -253,7 +253,7 @@ def findPlace(ship, container): #rowsene øker ikke.
                 for k in range(getLengthShip(ship)-1):
                     position = row[k]
                     if position == 0 and isContainerBelow(ship, (i, j, k)):
-                       return [[i, j, k]] #doble lister fordi den kjører på to elementer
+                       return [[i, j, k]] #doble lister fordi den kjører på to elementer   
         elif getLengthContainer(container) == 40:
             for j in range(getWidthShip(ship)):
                 row = deck[j]
@@ -261,7 +261,7 @@ def findPlace(ship, container): #rowsene øker ikke.
                     position1 = row[k]
                     position2 = row[k+1]
                     if (position1 == 0 and position2 == 0 and isContainerBelow(ship, (i,j,k)) and isContainerBelow(ship, (i,j,k+1))):
-                        return [[i, j, k],[i, j, k+1]]
+                        return [[i, j, k],[i, j, k+1]] 
         else:
             return False  
 
