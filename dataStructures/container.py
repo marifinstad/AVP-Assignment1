@@ -151,9 +151,23 @@ def readContainersFromFile(containers):
 
 #implement of a new ship
 def NewShip(length, width, height):
-    return [length, width, height, [], dict()]
+    frontLeft = [] #ship[5]
+    frontRight = [] #ship[6]
+    midLeft = [] #ship[7]
+    midRight = [] #ship[8]
+    backLeft = [] #ship[9]
+    backRight = [] #ship[10]
+    for i in range(87):
+        x = []
+        frontLeft.append(x)
+        frontRight.append(x)
+        midLeft.append(x)
+        midRight.append(x)
+        backLeft.append(x)
+        backRight.append(x)
+    return [length, width, height, [], dict(), frontLeft, frontRight, midLeft, midRight, backLeft, backRight]
 
-#gettere
+#gettere for ship
 def getLengthShip(ship):
     return ship[0]
 
@@ -173,6 +187,24 @@ def getRandomContainer(ship, i):
 def getDictFromShip(ship):
     return ship[4]
 
+def getFrontLeft(ship):
+    return ship[5]
+
+def getFrontRight(ship):
+    return ship[6]
+
+def getMidLeft(ship):
+    return ship[7]
+
+def getMidRight(ship):
+    return ship[8]
+
+def getBackLeft(ship):
+    return ship[9]
+
+def getBackRight(ship):
+    return ship[10]
+
 #settere
 def setLengthShip(ship, length):
     ship[0] = length
@@ -191,9 +223,11 @@ def numberOfContainersShips(ship):
 
 #inserts the conatiner into the i index in the list and the dict 
 def insertContainerOnShip(ship, container, i):
-    containers = getShipContainers(ship)
-    containers.insert(i,container)
+    #containers = getShipContainers(ship)
+    #containers.insert(i,container)
+    ship[3].append(container)
     addContainerToDict(ship,container)
+
 
 def appendContainerOnShip(ship, container):
    cont = getShipContainers(ship)
@@ -214,7 +248,75 @@ def removeContainerFromDict(ship,container):
     id = getIdContainer(container)
     del dict[id]
 
+#get Weight of stack
+def getWeightStack(stack):
+    weight = 0
+    for container in stack:
+        weight =+ getTotalWeightContainer(container)
+    return weight
 
+#gets the weight of the area
+def getWeightArea(area): #area = ship[6]
+    weight = 0
+    for stack in area:
+        weight += getWeightStack(stack)
+    return weight
+
+
+#finds the lighets area
+def getLightestArea(ship):
+    FL = getWeightArea(ship[5])
+    FR = getWeightArea(ship[6])
+    ML = getWeightArea(ship[7])
+    MR = getWeightArea(ship[8])
+    BL = getWeightArea(ship[9])
+    BR = getWeightArea(ship[10])
+    dict = {5: FL, 6: FR, 7: ML, 8: MR, 9: BL, 10 : BR}
+    minArea = min(dict.values())
+    
+    for key, value in dict.items():
+        if value == minArea:
+            return key
+
+#finds the lightest stack
+def getLightestStack(area):
+    stacknr = 0
+    lightest = 1000000000000
+    for i in range(len(area)):
+        if getWeightStack(area[i]) < lightest:
+            stacknr = i
+            lightest = getWeightStack(area[i])
+    return stacknr #denne returner en indeks i som gjør at vi i et area vet at den letteste stacken er f.eks FrontLeft[i]
+
+
+# lightestArea = getLightestArea(ship)
+# lightestStack = getLightestStack(lightestArea)
+# ship[lightestArea][lightestStack].append(container)
+
+def loadContainerToShip(ship,container):
+    newWeight = getTotalWeightContainer(container)
+    lightestArea = getLightestArea(ship)
+    lightestStack = getLightestStack(ship[lightestArea])
+    loaded = False
+    for i in range(len(ship[lightestArea][lightestStack])):
+        oldWeight = getTotalWeightContainer(ship[lightestArea][lightestStack][i])
+        if oldWeight <= newWeight:
+            #insertContainerOnShip
+            ship[lightestArea][lightestStack].insert(i,container)
+            ship[3].append(container)
+            addContainerToDict(ship,container)
+            loaded = True
+            break
+    if not loaded: 
+        ship[lightestArea][lightestStack].append(containers)
+        ship[3].append(container)
+        addContainerToDict(ship,container)
+    
+#### TEST 5
+skip5 = NewShip(24,22,18)
+randomContainers(containers)
+for container in containers:
+    loadContainerToShip(skip5,container)
 
 #loads the container onto the ship if it is lighter than the container under
 def loadContainerOnShip(ship, newContainer):
