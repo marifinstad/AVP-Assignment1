@@ -83,7 +83,7 @@ def checkID(id):
 
 #TASK 3
 def randomContainers(containers):
-    for i in range (0,10):
+    for i in range (0,1000):
         container = [0,0,0,0,0]
         id = random.randint(0,10000000)
         if checkID(id) == False:
@@ -157,8 +157,8 @@ def NewShip(length, width, height):
     midRight = [] #ship[8]
     backLeft = [] #ship[9]
     backRight = [] #ship[10]
-    for i in range(87):
-        x = []
+    for i in range(88):
+        x = []*18
         frontLeft.append(x)
         frontRight.append(x)
         midLeft.append(x)
@@ -294,7 +294,7 @@ def getLightestStack(area):
 # ship[lightestArea][lightestStack].append(container)
 
 def loadContainerToShip(ship,container):
-    newWeight = getTotalWeightContainer(container)
+    newWeight = container[4]
     lightestArea = getLightestArea(ship)
     lightestStack = getLightestStack(ship[lightestArea])
     loaded = False
@@ -308,35 +308,46 @@ def loadContainerToShip(ship,container):
             loaded = True
             break
     if not loaded: 
-        ship[lightestArea][lightestStack].append(containers)
-        ship[3].append(container)
+        ship[lightestArea][lightestStack] = [container]
+        #ship[3].append(container)
         addContainerToDict(ship,container)
     
 #### TEST 5
 skip5 = NewShip(24,22,18)
 randomContainers(containers)
-for container in containers:
-    loadContainerToShip(skip5,container)
+while True:
+    for cont in containers:
+        loadContainerToShip(skip5,cont)
+    for i in range (5):
+            print(skip5[5+i])
+            print(getWeightArea(skip5[5]))
+            print(getWeightArea(skip5[6]))
+            print(getWeightArea(skip5[7]))
+            print(getWeightArea(skip5[8]))
+            print(getWeightArea(skip5[9]))
+            print(getWeightArea(skip5[10]))
+    break
 
-#loads the container onto the ship if it is lighter than the container under
-def loadContainerOnShip(ship, newContainer):
-    newContainerWeight = getTotalWeightContainer(newContainer)
-    loaded = False
-    i = 0
-    while i < numberOfContainersShips(ship):
-        container = getRandomContainer(ship, i)
-        containerWeight = getTotalWeightContainer(container)
-        if containerWeight <= newContainerWeight:
-            insertContainerOnShip(ship, newContainer, i)
-            loaded = True
-            break
-        i = i + 1
-    if not loaded:
-        appendContainerOnShip(ship, newContainer)
 
-#checks if ship empty 
-def isEmptyShip(ship):
-    return numberOfContainersShips(ship) == 0
+# #loads the container onto the ship if it is lighter than the container under
+# def loadContainerOnShip(ship, newContainer):
+#     newContainerWeight = getTotalWeightContainer(newContainer)
+#     loaded = False
+#     i = 0
+#     while i < numberOfContainersShips(ship):
+#         container = getRandomContainer(ship, i)
+#         containerWeight = getTotalWeightContainer(container)
+#         if containerWeight <= newContainerWeight:
+#             insertContainerOnShip(ship, newContainer, i)
+#             loaded = True
+#             break
+#         i = i + 1
+#     if not loaded:
+#         appendContainerOnShip(ship, newContainer)
+
+# #checks if ship empty 
+# def isEmptyShip(ship):
+#     return numberOfContainersShips(ship) == 0
 
 #add container to list on ship
 def addContainerToShip(ship,container):
