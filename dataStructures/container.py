@@ -303,15 +303,16 @@ def loadContainerToShip(ship,container):
     lightestArea = getLightestArea(ship)
     lightestStack = getLightestStack(ship[lightestArea])
     loaded = False
-    # for i in range(len(ship[lightestArea][lightestStack])):
-    #     oldWeight = getTotalWeightContainer(ship[lightestArea][lightestStack][i])
-    #     if oldWeight <= newWeight:
-    #         #insertContainerOnShip
-    #         ship[lightestArea][lightestStack].insert(i,container)
-    #         ship[3].append(container)
-    #         addContainerToDict(ship,container)
-    #         loaded = True
-    #         break
+    #det er denne det er noe rart med!!!!!
+    for i in range(len(ship[lightestArea][lightestStack])):
+        oldWeight = getTotalWeightContainer(ship[lightestArea][lightestStack][i])         
+        if oldWeight <= newWeight:
+            #insertContainerOnShip
+            ship[lightestArea][lightestStack].insert(i,container)
+            ship[3].append(container)
+            addContainerToDict(ship,container)
+            loaded = True
+            break
     if not loaded: 
         ship[lightestArea][lightestStack].append(container)
         #ship[3].append(container)
