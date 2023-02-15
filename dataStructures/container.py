@@ -85,7 +85,7 @@ def checkID(id):
 def randomContainers(containers):
     for i in range (0,1000):
         container = [0,0,0,0,0]
-        id = random.randint(0,10000000)
+        id = i
         if checkID(id) == False:
             setIdContainer(container, id)
             cargo = random.randint(0,23)
@@ -158,13 +158,18 @@ def NewShip(length, width, height):
     backLeft = [] #ship[9]
     backRight = [] #ship[10]
     for i in range(88):
-        x = []*18
+        x = []
+        y = []
+        z = []
+        a = []
+        b = []
+        c = []
         frontLeft.append(x)
-        frontRight.append(x)
-        midLeft.append(x)
-        midRight.append(x)
-        backLeft.append(x)
-        backRight.append(x)
+        frontRight.append(y)
+        midLeft.append(z)
+        midRight.append(a)
+        backLeft.append(b)
+        backRight.append(c)
     return [length, width, height, [], dict(), frontLeft, frontRight, midLeft, midRight, backLeft, backRight]
 
 #gettere for ship
@@ -298,17 +303,17 @@ def loadContainerToShip(ship,container):
     lightestArea = getLightestArea(ship)
     lightestStack = getLightestStack(ship[lightestArea])
     loaded = False
-    for i in range(len(ship[lightestArea][lightestStack])):
-        oldWeight = getTotalWeightContainer(ship[lightestArea][lightestStack][i])
-        if oldWeight <= newWeight:
-            #insertContainerOnShip
-            ship[lightestArea][lightestStack].insert(i,container)
-            ship[3].append(container)
-            addContainerToDict(ship,container)
-            loaded = True
-            break
+    # for i in range(len(ship[lightestArea][lightestStack])):
+    #     oldWeight = getTotalWeightContainer(ship[lightestArea][lightestStack][i])
+    #     if oldWeight <= newWeight:
+    #         #insertContainerOnShip
+    #         ship[lightestArea][lightestStack].insert(i,container)
+    #         ship[3].append(container)
+    #         addContainerToDict(ship,container)
+    #         loaded = True
+    #         break
     if not loaded: 
-        ship[lightestArea][lightestStack] = [container]
+        ship[lightestArea][lightestStack].append(container)
         #ship[3].append(container)
         addContainerToDict(ship,container)
     
