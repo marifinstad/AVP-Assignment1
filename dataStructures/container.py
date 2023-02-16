@@ -1,9 +1,10 @@
 import random
+import csv
 
 #TASK 1
-def NewContainer(id, length, cargo): #skal man ta inn en weight her også?
-    #cargo er mengen av materialet den har med
-    #listen med containere blir  [id, length, wighth, cargo]
+def NewContainer(id, length, cargo): 
+    #Cargo is the amount of material
+    #The list with containers will be [id, length, width, cargo]
     if cargo < 0 or cargo > 23:
         return print("cannot load container due to over/under weight")
     if length == 20:
@@ -13,42 +14,60 @@ def NewContainer(id, length, cargo): #skal man ta inn en weight her også?
     else:
         return ("could not obtain container")
 
-#Conatiner er nå en liste med info om en container
-#få tak i ID nummeret til en container
+#Container is now a list with info about a container
+#Gets the ID number to a container
 def getIdContainer(container):
     return container[0]
-#få tak i LENGEN til en container
+#Gets the length to a container
 def getLengthContainer(container):
     return container[1]
-#få tak i VEKTEN til en container
+#Gets the weight to a container
 def getWeigtContainer(container):
     return container[2]
-#få tak i LASTEN til en container
+#gets all the cargo from the ship 
 def getCargoContainer(container):
     return container[3]
-#få tak i TOTALVEKT til container:
+#Gets the total weight to a container:
 def getTotalWeightContainer(container):
-    #return container[2] + container[3]
     container[4] = getWeigtContainer(container) + getCargoContainer(container)
     return container[4]
 
-#sette ID
+#set the id for a container
 def setIdContainer(container, id):
     container[0] = id
-#sette lengde
+#set length of container
 def setLengthContainer(container, length):
     container[1] = length
-    #sette vekt
+    #set weight for container
 def setWeigthContainer(container, weight):
     container[2] = weight
-#sette cargo
+#set cargo for container
 def setCargoContainer(container, cargo):
     container[3] = cargo
 
-#END OF TASK 1
-
+#END OF TASK 1  
 #TEST 1
-
+# c1 = [0,0,0,0,0]
+# c2 = [0,0,0,0,0]
+# c3 = [0,0,0,0,0]
+# setIdContainer(c1,1)
+# setIdContainer(c2,2)
+# setIdContainer(c3,3)
+# setLengthContainer(c3,40)
+# setLengthContainer(c2,40)
+# setLengthContainer(c1,40)
+# setCargoContainer(c1,4)
+# setCargoContainer(c2,10)
+# setCargoContainer(c3,5)
+# task1 = [c1,c2,c3]
+# for q in task1:
+#     setWeigthContainer(q,4)
+#     getIdContainer(q)
+#     getCargoContainer(q)
+#     getWeigtContainer(q)
+#     getLengthContainer(q)
+#     getTotalWeightContainer(q)
+# print(task1)
 
 
 #TASK 2
@@ -83,13 +102,15 @@ def checkID(id):
 
 #TASK 3
 def randomContainers(containers):
-    for i in range (0,50):
+    for i in range (0,10):
+         #id = i This gives us an increasing index
         container = [0,0,0,0,0]
-        id = i
+        id = random.randint(0,100000)
         if checkID(id) == False:
             setIdContainer(container, id)
             cargo = random.randint(0,23)
             setCargoContainer(container,cargo)
+#The code below generates a 20ft or 40ft container. We assume that we only get 40ft containers for the rest of the code
             #weight = random.randrange(2,5,2)
             #setWeigthContainer(container,weight)
             #if weight == 2:
@@ -106,21 +127,18 @@ def randomContainers(containers):
 #END OF TASK 3
 
 #TEST TASK 3
-
-#print("----")
-#randomContainers(containers)
+randomContainers(containers)
 #print(containers)
 
 #TASK 4
-# #Lage det om til filformat
+#Lage det om til filformat
 def fileFormatContainer(container):
-     # id,lengde,egenvekt,loadvekt,totalvekt
-    return str(container[0])+" "+str(container[1])+" "+str(container[2])+" "+str(container[3])+" "+str(getTotalWeightContainer(container))
+     # id, length, unladen weight, loadweight ,total weight
+    return str(container[0])+","+str(container[1])+","+str(container[2])+","+str(container[3])+","+str(getTotalWeightContainer(container))
 
-#skrive til fil
 def writeContainersToFile(containers):
     try:
-        with open("dataStructures/load.csv", "w") as fp:
+        with open("load.csv", "w") as fp:
             for container in containers:
                 formatedContainer = fileFormatContainer(container)
                 fp.write("%s\n" % formatedContainer)
@@ -130,24 +148,30 @@ def writeContainersToFile(containers):
 
 def readContainersFromFile(containers):
     try:
-        with open("dataStructures/load.csv", "r") as fp:
-            container = fp.read()
-            list = [container.splitlines()]
-            for line in range(0, len(list)-1):
-                containers.append(line)
+        with open("load.csv", "r") as fp:
+            empty = []
+            container = csv.reader(fp)
+            for row in container: 
+                list = [eval(i) for i in row]
+                empty.append(list)
+            for el in empty:
+                containers.append(el)
             fp.close()
     except:
         print("Could not read file")
+
 #END OF TASK 4
 
 #TEST TASK 4
 
 #writeContainersToFile(containers)
-#readContainersFromFile(containers)
+# readContainersFromFile(containers)
+# print(containers)
 
 
-#TASK 5 AND 7
-### DETT ER SHIPS #####
+
+#TASK 5 AND 7 AND 8
+### THIS IS SHIPS #####
 
 #implement of a new ship
 def NewShip(length, width, height):
@@ -224,15 +248,11 @@ def numberOfContainersShips(ship):
     return len(getShipContainers(ship))
 
 
-#støttefunksjoner til dictionary
+#Helpfunctions
 
 #inserts the conatiner into the i index in the list and the dict
 def insertContainerOnShip(ship, container, i):
-    #containers = getShipContainers(ship)
-    #containers.insert(i,container)
     ship[3].append(container)
-    addContainerToDict(ship,container)
-
 
 def appendContainerOnShip(ship, container):
    cont = getShipContainers(ship)
@@ -273,12 +293,9 @@ def getLightestArea(ship):
     areanr = 0
     lettest = 10000000000000000
     for i in range(6):
-        #print(getWeightArea(ship[5+i]))
         if getWeightArea(ship[5+i]) < lettest:
             lettest = getWeightArea(ship[5+i])
             areanr = 5 + i
-    #print(lettest)
-    #print(areanr)
     return areanr
 
 
@@ -288,21 +305,11 @@ def getLightestStack(area):
     lightest = 1000000000000
     for i in range(len(area)):
         weight = getWeightStack(area[i])
-        #print(str(weight)+  " DETTE ER EN STACKWEIGHT")
         if weight < lightest and len(area[i]) <= 18:
             stacknr = i
-            #print("this is area i")
-            #print(area[i])
             lightest = weight
-    #print(lightest)
-    #print(stacknr) 
     return stacknr #denne returner en indeks i som gjør at vi i et area vet at den letteste stacken er f.eks FrontLeft[i]
-
-
-# lightestArea = getLightestArea(ship)
-# lightestStack = getLightestStack(lightestArea)
-# ship[lightestArea][lightestStack].append(container)
-
+    #This returns an index i that will 
 
 def loadContainerToShip(ship,container):
     #newWeight = container[4]
@@ -312,22 +319,20 @@ def loadContainerToShip(ship,container):
     #print(str(lightestArea)+ ", "+ str(lightestStack))
     #print(str(getWeightStack(ship[lightestArea][lightestStack]))+ " STACKWEIGHT \n")
     ship[lightestArea][lightestStack].append(container)
-    ship[lightestArea][lightestStack].sort(key = lambda x: x[4], reverse = True)
+    ship[lightestArea][lightestStack].sort(key = lambda x: x[4], reverse = True) #THIS IS TASK 8
     ship[3].append(container)
     addContainerToDict(ship,container)
 
-removedContainers = []
+
+
 #finds the lighets area
 def getHeaviestArea(ship):
     areanr = 0
     lettest = 0
     for i in range(6):
-        #print(getWeightArea(ship[5+i]))
         if getWeightArea(ship[5+i]) > lettest:
             lettest = getWeightArea(ship[5+i])
             areanr = 5 + i
-    #print(lettest)
-    #print(areanr)
     return areanr
 
 
@@ -337,25 +342,21 @@ def getHeaviestStack(area):
     lightest = 0
     for i in range(len(area)):
         weight = getWeightStack(area[i])
-        #print(str(weight)+  " DETTE ER EN STACKWEIGHT")
         if weight > lightest and len(area[i]) <= 18:
             stacknr = i
-            #print("this is area i")
-            #print(area[i])
             lightest = weight
-    #print(lightest)
-    #print(stacknr) 
     return stacknr #denne returner en indeks i som gjør at vi i et area vet at den letteste stacken er f.eks FrontLeft[i]
 
 def unloadContainers(ship):
     while len(ship[3]) != 0:
         heaviestArea = getHeaviestArea(ship)
-        #print(ship[lightestArea])
         heaviestStack = getHeaviestStack(ship[heaviestArea])
         container = ship[heaviestArea][heaviestStack].pop()
         removedContainers.append(container)
         removeContainerFromDict(ship,container)
         ship[3].remove(container)
+
+    removedContainers = []
 #### TEST 5
 # skip5 = NewShip(24,22,18)
 # randomContainers(containers)
@@ -366,7 +367,6 @@ def unloadContainers(ship):
 #     # #         print(skip5[5+i])
 
 #     #unloadContainers(skip5)
-#     print("hei")
 #     break
 
 ##########################   NEED TO CHECK IF WE NEED THESE   ##########################################
@@ -411,6 +411,47 @@ def unloadContainers(ship):
 #         removedContainers.append(container)
 #     return removedContainers
 
+# TASK 6 #
+
+def fileFormatShip(container):
+#[length, width, height, [], dict(), frontLeft, frontRight, midLeft, midRight, backLeft, backRight
+    return str(container[0]) + ',' + str(container[1]) + ',' + str(container[2]) + ',' + str(container[3]) + ',' + str(container[4])  
+
+def writeShipToFile(ship):
+    try:
+       with open("loadShip.tsv", "w") as fp:
+            for container in ship[3]:
+                formatedShip = fileFormatShip(container)
+                fp.write("%s\n" % formatedShip)
+            fp.close()
+    except:
+         print("Could not write to file")
+
+def loadShipFromFile(ship):
+    try:
+        with open("loadShip.tsv", "r") as fp:
+            empty = []
+            container = csv.reader(fp)
+            for row in container:
+                list = [eval(i) for i in row]
+                empty.append(list)
+            container = fp.read()
+            for el in empty:
+                loadContainerToShip(ship,el)
+            fp.close()
+    except:
+        print("Could not read file")
+
+###TEST TASK 6###
+# skip6 = NewShip(24,22,18)
+# randomContainers(containers)
+# while True:
+#     for container in containers:
+#         loadContainerToShip(skip6, container)
+#     break
+# writeShipToFile(skip6)
+# loadShipFromFile(skip6)
+# print(skip6)
 
 
 #TASK 9
@@ -447,8 +488,8 @@ def getWeightsOfSections(ship):
 
 def getStabilitySide(ship):
     weight1, weight2 = getWeightsOfSideShip(ship)
-    percentage = abs(weight2 - weight1)/max(weight2,weight1) * 100
-    if percentage <= 5:
+    percentage = abs(weight2 - weight1)/min(weight2,weight1) * 100
+    if percentage <= 10:
         print("The differenece bewteen the sides are: " + str(percentage))
         return True
     else:
@@ -464,7 +505,7 @@ def getStabilitySection(ship):
     percentages = [percentage1,percentage2,percentage3]
     okey = False
     for el in percentages:
-        if el < 9: 
+        if el < 10: 
             okey = True
         else: 
             print("Stability between sides are not good")
@@ -484,94 +525,35 @@ def checkStability(ship):
      
 
 #TEST TASK 9
-skip9 = NewShip(24,22,18)
-randomContainers(containers)
-while True:
-    for cont in containers:
-        loadContainerToShip(skip9,cont)
-    break
-print("           /\          ")
-print("          /  \         ")
-print("_______________________")
-print("|section 1:|section 2: ")
-print("|        "+ str(getWeightArea(skip9[5]))+ "|        "+str(getWeightArea(skip9[6]))+ "|")
-print("_______________________")
-print("|section 3:|section 4: ")
-print("|        "+ str(getWeightArea(skip9[7]))+ "|        "+str(getWeightArea(skip9[8]))+ "|")
-print("_______________________")
-print("|section 5:|section 6: ")
-print("|        "+ str(getWeightArea(skip9[9]))+ "|        " +str(getWeightArea(skip9[10]))+ "|")
-print("_______________________")
-for i in range (6):
-    print("Weight of section "+ str(i)+ " is : " + str(getWeightArea(skip9[5+i])))
-checkStability(skip9)
+# skip9 = NewShip(24,22,18)
+# randomContainers(containers)
+# while True:
+#     for cont in containers:
+#         loadContainerToShip(skip9,cont)
+#     break
+# print("           /\          ")
+# print("          /  \         ")
+# print("_______________________")
+# print("|section 1:|section 2: ")
+# print("|        "+ str(getWeightArea(skip9[5]))+ "|        "+str(getWeightArea(skip9[6]))+ "|")
+# print("_______________________")
+# print("|section 3:|section 4: ")
+# print("|        "+ str(getWeightArea(skip9[7]))+ "|        "+str(getWeightArea(skip9[8]))+ "|")
+# print("_______________________")
+# print("|section 5:|section 6: ")
+# print("|        "+ str(getWeightArea(skip9[9]))+ "|        " +str(getWeightArea(skip9[10]))+ "|")
+# print("_______________________")
+# for i in range (6):
+#     print("Weight of section "+ str(i)+ " is : " + str(getWeightArea(skip9[5+i])))
+# checkStability(skip9)
 
 ### PRINT SHIPS ###
 
-# TASK 6 #
-
-def fileFormatShip(container):
-#[length, width, height, [], dict(), frontLeft, frontRight, midLeft, midRight, backLeft, backRight
-    return str(container[0]) + ' ' + str(container[1]) + ' ' + str(container[2]) + ' ' + str(container[3]) + ' ' + str(container[4])  
-
-def writeShipToFile(ship):
-    try:
-       with open("dataStructures/loadShip.tsv", "w") as fp:
-            for container in ship[3]:
-                formatedShip = fileFormatShip(container)
-                fp.write("%s\n" % formatedShip)
-            fp.close()
-    except:
-         print("Could not write to file")
-
-# def loadShipFromFile(ship):
-#     try:
-#         with open("dataStructures/loadShip.tsv", "r") as fp:
-#             container = fp.read()
-#             list = [container.splitlines()]
-#             for line in list:
-#                 #ship[3].append(line)
-#                 loadContainerToShip(ship, line)
-#             fp.close()
-#             #return print(el)
-#     except:
-#         print("Could not read file")
-
-###TEST TASK 6###
-#skip5 = NewShip(24,22,18)
-#randomContainers(containers)
-#print('hei')
-# while True:
-#     for container in containers:
-#         loadContainerToShip(skip5, container)
-#     break
-#print(skip5)
-#writeShipToFile(skip5)
-#loadShipFromFile(skip5)
-#print(skip5)
-
-#Dette er en test
-
-#ship = NewShip(23, 22, 18)
-# c1 = NewContainer(1000, 20, 5)
-# c2 = NewContainer(1010, 40, 9)
-# c3 = NewContainer(1100, 20, 10)
-# c4 = NewContainer(1001, 40, 20)
-
-# loadContainerOnShip(ship, c1)
-# loadContainerOnShip(ship, c2)
-# loadContainerOnShip(ship, c3)
-# loadContainerOnShip(ship, c4)
-
-#print("------")
-#print(ship)
-
+#TASK 11
+def test11(liste):
+    return print("It takes "+str(len(liste)*4)+" minutes to load the container to the ship")
+    
+#TEST 11
 # randomContainers(containers)
-# sortContainersWeight(containers)
-# for el in containers:
-#      print(fileFormatContainer(el))
-# writeContainersToFile(containers)
-# print("----")
-# readContainersFromFile(containers)
-# print(containers)
+# test11(containers)
 
