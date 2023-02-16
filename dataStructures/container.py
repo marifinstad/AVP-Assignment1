@@ -107,7 +107,7 @@ def randomContainers(containers):
 
 #TEST TASK 3
 
-print("----")
+#print("----")
 #randomContainers(containers)
 #print(containers)
 
@@ -422,7 +422,7 @@ def getWeightofShip(ship):
         weight += getWeightArea(ship[5+i])
     return print("Total weight of ship is: " + str(weight))
 
-def getStabilitySide(ship):
+def getWeightsOfSideShip(ship):
     weight1 = 0
     weight2 = 0
     for i in range(6):
@@ -430,11 +430,34 @@ def getStabilitySide(ship):
             weight1 += getWeightArea(ship[5+i])
         if (i+5)%2 == 0:
             weight2 += getWeightArea(ship[5+i])
+    return weight1, weight2
+
+def getWeightsOfSections(ship):
+    part1 = 0
+    part2 = 0
+    part3 = 0
+    for i in range(6):
+        weight += getWeightArea(ship[5+i])
+        if i == 0 or i == 1: 
+            part1 += weight
+        if i == 2 or i == 3: 
+            part2 += weight
+        if i == 4 or i == 5: 
+            part3 += weight
+    return part1,part2,part3
+
+def getStabilitySide(ship):
+    print("The total weight of the ship is: " + str(getWeightofShip(ship)))
+    weight1, weight2 = getWeightsOfSideShip(ship)
     percentage = abs(weight2 - weight1)/max(weight2,weight1) * 100
     if percentage <= 5:
         return print("The differenece bewteen the sides are: " + str(percentage))
     else:
         return print("The difference between sides are above the limit, it is "+ str(percentage))
+
+def getStabilitySection(ship):
+    part1,part2,part3 = getWeightsOfSections(ship)
+    percentage = abs(weight2 - weight1)/max(weight2,weight1) * 100
 
 #TEST TASK 9
 print(getWeightArea(skip5[5]))
@@ -447,24 +470,44 @@ getWeightofShip(skip5)
 getStabilitySide(skip5)
 ### PRINT SHIPS ###
 
-# def fileFormatShip(ship):
+def fileFormatShip(ship):
 #      # id,lengde,egenvekt,loadvekt,totalvekt
-#     containerWeight = getTotalWeightContainer(ship[3])
-#     return containerWeight
+#[length, width, height, [], dict(), frontLeft, frontRight, midLeft, midRight, backLeft, backRight]
+    return str(ship[0]) + ' ' + str(ship[1]) + ' ' + str(ship[2]) + ' ' + str(ship[3]) + ' ' + str(ship[4]) + ' ' + str(ship[5]) + ' ' + str(ship[6]) + ' ' + str(ship[7]) + ' ' + str(ship[8]) + ' ' + str(ship[9])+ ' ' + str(ship[10])
 
-# def writeShipsToFile(ship):
-#     try:
-#         with open("dataStructures/loadShip.tsv", "w") as fp:
-#             for container in ship:
-#                 formatedShip = fileFormatShip(container)
-#                 fp.write("%s\n" % formatedShip)
+def writeShipToFile(ship):
+    try:
+       with open("dataStructures/loadShip.tsv", "w") as fp:
+            for container in ship:
+                formatedShip = fileFormatShip(container)
+                fp.write("%s\n" % formatedShip)
+            fp.close()
+    except:
+         print("Could not write to file")
 
-#         fp.close()
-#     except:
-#         print("Could not write to file")
+def readShipFromFile(ship):
+    try:
+        with open("dataStructures/loadShip.tsv", "r") as fp:
+            ship = fp.read()
+            list = [ship.splitlines()]
+            for line in range(0, len(list)-1):
+                ship.append(line)
+            fp.close()
+    except:
+        print("Could not read file")
 
-# ship = NewShip(23, 22, 18)
-# writeShipsToFile(ship)
+###TEST TASK 6###
+skip5 = NewShip(24,22,18)
+randomContainers(containers)
+#print('hei')
+# while True:
+#     for cont in containers:
+#         loadContainerToShip(skip5,cont)
+#     break
+print(skip5)
+writeShipToFile(skip5)
+
+
 
 
 #Dette er en test
