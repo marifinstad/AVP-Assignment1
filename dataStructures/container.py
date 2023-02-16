@@ -311,12 +311,10 @@ def loadContainerToShip(ship,container):
     lightestStack = getLightestStack(ship[lightestArea])
     #print(str(lightestArea)+ ", "+ str(lightestStack))
     #print(str(getWeightStack(ship[lightestArea][lightestStack]))+ " STACKWEIGHT \n")
-    loaded = False
-    if not loaded:
-        ship[lightestArea][lightestStack].append(container)
-        ship[lightestArea][lightestStack].sort(key = lambda x: x[4], reverse = True)
-        ship[3].append(container)
-        addContainerToDict(ship,container)
+    ship[lightestArea][lightestStack].append(container)
+    ship[lightestArea][lightestStack].sort(key = lambda x: x[4], reverse = True)
+    ship[3].append(container)
+    addContainerToDict(ship,container)
 
 removedContainers = []
 #finds the lighets area
@@ -420,7 +418,8 @@ def getWeightofShip(ship):
     weight = 0
     for i in range (5):
         weight += getWeightArea(ship[5+i])
-    return print("Total weight of ship is: " + str(weight))
+    print("The total weight of the ship is: " + str(weight))
+    return weight
 
 def getWeightsOfSideShip(ship):
     weight1 = 0
@@ -437,7 +436,7 @@ def getWeightsOfSections(ship):
     part2 = 0
     part3 = 0
     for i in range(6):
-        weight += getWeightArea(ship[5+i])
+        weight = getWeightArea(ship[5+i])
         if i == 0 or i == 1: 
             part1 += weight
         if i == 2 or i == 3: 
@@ -447,7 +446,6 @@ def getWeightsOfSections(ship):
     return part1,part2,part3
 
 def getStabilitySide(ship):
-    print("The total weight of the ship is: " + str(getWeightofShip(ship)))
     weight1, weight2 = getWeightsOfSideShip(ship)
     percentage = abs(weight2 - weight1)/max(weight2,weight1) * 100
     if percentage <= 5:
@@ -460,30 +458,45 @@ def getStabilitySide(ship):
 def getStabilitySection(ship):
     part1,part2,part3 = getWeightsOfSections(ship)
     el = [part1,part2,part3]
-    percentage1 = abs(el[0] - el[1])/max(el[0],el[1]) * 100
-    percentage2 = abs(el[2] - el[1])/max(el[2],el[1]) * 100
-    percentage3 = abs(el[0] - el[2])/max(el[0],el[2]) * 100
+    percentage1 = abs(el[0] - el[1])/min(el[0],el[1]) * 100
+    percentage2 = abs(el[2] - el[1])/min(el[2],el[1]) * 100
+    percentage3 = abs(el[0] - el[2])/min(el[0],el[2]) * 100
     percentages = [percentage1,percentage2,percentage3]
     okey = False
     for el in percentages:
         if el < 10: 
-            print("Stability between sides are not good")
             okey = True
         else: 
+            print("Stability between sides are not good")
             return False
     return okey
-    
+
+def checkStability(ship):
+    stabil = True
+    if getStabilitySection(ship) == False:
+        stabil = False
+    if getStabilitySide(ship) == False:
+        stabil = False
+    print("Ship is stable status: "+ str(stabil))
+    return stabil
+
      
 
 #TEST TASK 9
-# print(getWeightArea(skip5[5]))
-# print(getWeightArea(skip5[6]))
-# print(getWeightArea(skip5[7]))
-# print(getWeightArea(skip5[8]))
-# print(getWeightArea(skip5[9]))
-# print(getWeightArea(skip5[10]))
-# getWeightofShip(skip5)
-# getStabilitySide(skip5)
+skip5 = NewShip(24,22,18)
+randomContainers(containers)
+while True:
+    for cont in containers:
+        loadContainerToShip(skip5,cont)
+    break
+print(getWeightArea(skip5[5]))
+print(getWeightArea(skip5[6]))
+print(getWeightArea(skip5[7]))
+print(getWeightArea(skip5[8]))
+print(getWeightArea(skip5[9]))
+print(getWeightArea(skip5[10]))
+checkStability(skip5)
+
 ### PRINT SHIPS ###
 
 # TASK 6 #
