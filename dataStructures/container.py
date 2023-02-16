@@ -83,7 +83,7 @@ def checkID(id):
 
 #TASK 3
 def randomContainers(containers):
-    for i in range (0,48):
+    for i in range (0,5000):
         container = [0,0,0,0,0]
         id = i
         if checkID(id) == False:
@@ -157,7 +157,7 @@ def NewShip(length, width, height):
     midRight = [] #ship[8]
     backLeft = [] #ship[9]
     backRight = [] #ship[10]
-    for i in range(4):
+    for i in range(88):
         x = []
         y = []
         z = []
@@ -270,27 +270,15 @@ def getWeightArea(area): #area = ship[6]
 
 #finds the lighets area
 def getLightestArea(ship):
-    # FL = getWeightArea(ship[5])
-    # FR = getWeightArea(ship[6])
-    # ML = getWeightArea(ship[7])
-    # MR = getWeightArea(ship[8])
-    # BL = getWeightArea(ship[9])
-    # BR = getWeightArea(ship[10])
-    # dict = {5: FL, 6: FR, 7: ML, 8: MR, 9: BL, 10 : BR}
-    # minArea = min(dict.values())
-
-    # for key, value in dict.items():
-    #     if value == minArea:
-    #         return key
     areanr = 0
     lettest = 10000000000000000
     for i in range(6):
-        print(getWeightArea(ship[5+i]))
+        #print(getWeightArea(ship[5+i]))
         if getWeightArea(ship[5+i]) < lettest:
             lettest = getWeightArea(ship[5+i])
             areanr = 5 + i
-    print(lettest)
-    print(areanr)
+    #print(lettest)
+    #print(areanr)
     return areanr
 
 
@@ -300,11 +288,11 @@ def getLightestStack(area):
     lightest = 1000000000000
     for i in range(len(area)):
         weight = getWeightStack(area[i])
-        print(str(weight)+  " DETTE ER EN STACKWEIGHT")
-        if weight < lightest:
+        #print(str(weight)+  " DETTE ER EN STACKWEIGHT")
+        if weight < lightest and len(area[i]) <= 18:
             stacknr = i
-            print("this is area i")
-            print(area[i])
+            #print("this is area i")
+            #print(area[i])
             lightest = weight
     #print(lightest)
     #print(stacknr) 
@@ -315,35 +303,32 @@ def getLightestStack(area):
 # lightestStack = getLightestStack(lightestArea)
 # ship[lightestArea][lightestStack].append(container)
 
+
 def loadContainerToShip(ship,container):
     newWeight = container[4]
     lightestArea = getLightestArea(ship)
-    print(ship[lightestArea])
+    #print(ship[lightestArea])
     lightestStack = getLightestStack(ship[lightestArea])
-    print(str(lightestArea)+ ", "+ str(lightestStack))
-    print(str(getWeightStack(ship[lightestArea][lightestStack]))+ " STACKWEIGHT \n")
+    #print(str(lightestArea)+ ", "+ str(lightestStack))
+    #print(str(getWeightStack(ship[lightestArea][lightestStack]))+ " STACKWEIGHT \n")
     loaded = False
-    stack = ship[lightestArea][lightestStack]
-
-    # for i in range(len(stack)):
-    #     if newWeight > getTotalWeightContainer(stack[i]) and len(stack) != 0:
-    #         stack.insert(i,container)
-    #         loaded = True
     if not loaded:
         ship[lightestArea][lightestStack].append(container)
-        #ship[3].append(container)
+        ship[lightestArea][lightestStack].sort(key = lambda x: x[4], reverse = True)
+        ship[3].append(container)
         addContainerToDict(ship,container)
+
 
 #### TEST 5
 skip5 = NewShip(24,22,18)
 randomContainers(containers)
 while True:
-        for cont in containers:
-            loadContainerToShip(skip5,cont)
+    for cont in containers:
+        loadContainerToShip(skip5,cont)
     # # for i in range (5):
     # #         print(skip5[5+i])
-
-        break
+    print("hei")
+    break
 
 
 # #loads the container onto the ship if it is lighter than the container under
