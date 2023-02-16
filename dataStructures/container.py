@@ -257,7 +257,7 @@ def removeContainerFromDict(ship,container):
 def getWeightStack(stack):
     weight = 0
     for container in stack:
-        weight =+ getTotalWeightContainer(container)
+        weight += getTotalWeightContainer(container)
     return weight
 
 #gets the weight of the area
@@ -299,12 +299,15 @@ def getLightestStack(area):
     stacknr = 0
     lightest = 1000000000000
     for i in range(len(area)):
-    #    print(getWeightStack(area[i]))
-        if getWeightStack(area[i]) < lightest:
-            lightest = getWeightStack(area[i])
+        weight = getWeightStack(area[i])
+        print(str(weight)+  " DETTE ER EN STACKWEIGHT")
+        if weight < lightest:
             stacknr = i
+            print("this is area i")
+            print(area[i])
+            lightest = weight
     #print(lightest)
-    #print(stacknr)
+    #print(stacknr) 
     return stacknr #denne returner en indeks i som gjør at vi i et area vet at den letteste stacken er f.eks FrontLeft[i]
 
 
@@ -315,11 +318,17 @@ def getLightestStack(area):
 def loadContainerToShip(ship,container):
     newWeight = container[4]
     lightestArea = getLightestArea(ship)
+    print(ship[lightestArea])
     lightestStack = getLightestStack(ship[lightestArea])
     print(str(lightestArea)+ ", "+ str(lightestStack))
-    print(str(getWeightStack(ship[lightestArea][lightestStack]))+ "\n")
+    print(str(getWeightStack(ship[lightestArea][lightestStack]))+ " STACKWEIGHT \n")
     loaded = False
+    stack = ship[lightestArea][lightestStack]
 
+    # for i in range(len(stack)):
+    #     if newWeight > getTotalWeightContainer(stack[i]) and len(stack) != 0:
+    #         stack.insert(i,container)
+    #         loaded = True
     if not loaded:
         ship[lightestArea][lightestStack].append(container)
         #ship[3].append(container)
