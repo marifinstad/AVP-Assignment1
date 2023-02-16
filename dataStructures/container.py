@@ -490,6 +490,18 @@ while True:
     for cont in containers:
         loadContainerToShip(skip9,cont)
     break
+print("           /\          ")
+print("          /  \         ")
+print("_______________________")
+print("|section 1:|section 2: ")
+print("|        "+ str(getWeightArea(skip9[5]))+ "|        "+str(getWeightArea(skip9[6]))+ "|")
+print("_______________________")
+print("|section 3:|section 4: ")
+print("|        "+ str(getWeightArea(skip9[7]))+ "|        "+str(getWeightArea(skip9[8]))+ "|")
+print("_______________________")
+print("|section 5:|section 6: ")
+print("|        "+ str(getWeightArea(skip9[9]))+ "|        " +str(getWeightArea(skip9[10]))+ "|")
+print("_______________________")
 for i in range (6):
     print("Weight of section "+ str(i)+ " is : " + str(getWeightArea(skip9[5+i])))
 checkStability(skip9)
@@ -526,8 +538,8 @@ def writeShipToFile(ship):
 #         print("Could not read file")
 
 ###TEST TASK 6###
-skip5 = NewShip(24,22,18)
-randomContainers(containers)
+#skip5 = NewShip(24,22,18)
+#randomContainers(containers)
 #print('hei')
 # while True:
 #     for container in containers:
