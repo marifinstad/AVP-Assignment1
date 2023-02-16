@@ -305,7 +305,7 @@ def getLightestStack(area):
 
 
 def loadContainerToShip(ship,container):
-    newWeight = container[4]
+    #newWeight = container[4]
     lightestArea = getLightestArea(ship)
     #print(ship[lightestArea])
     lightestStack = getLightestStack(ship[lightestArea])
@@ -356,22 +356,22 @@ def unloadContainers(ship):
         heaviestStack = getHeaviestStack(ship[heaviestArea])
         container = ship[heaviestArea][heaviestStack].pop()
         removedContainers.append(container)
+        removeContainerFromDict(ship,container)
         ship[3].remove(container)
 #### TEST 5
-skip5 = NewShip(24,22,18)
-randomContainers(containers)
-while True:
-    for cont in containers:
-        loadContainerToShip(skip5,cont)
-    # # for i in range (5):
-    # #         print(skip5[5+i])
+# skip5 = NewShip(24,22,18)
+# randomContainers(containers)
+# while True:
+#     for cont in containers:
+#         loadContainerToShip(skip5,cont)
+#     # # for i in range (5):
+#     # #         print(skip5[5+i])
 
-    #unloadContainers(skip5)
-    print("hei")
-    break
+#     #unloadContainers(skip5)
+#     print("hei")
+#     break
 
-
-
+##########################   NEED TO CHECK IF WE NEED THESE   ##########################################
 # #checks if ship empty
 # def isEmptyShip(ship):
 #     return numberOfContainersShips(ship) == 0
@@ -451,64 +451,82 @@ def getStabilitySide(ship):
     weight1, weight2 = getWeightsOfSideShip(ship)
     percentage = abs(weight2 - weight1)/max(weight2,weight1) * 100
     if percentage <= 5:
-        return print("The differenece bewteen the sides are: " + str(percentage))
+        print("The differenece bewteen the sides are: " + str(percentage))
+        return True
     else:
-        return print("The difference between sides are above the limit, it is "+ str(percentage))
+        print("The difference between sides are above the limit, it is "+ str(percentage))
+        return False
 
 def getStabilitySection(ship):
     part1,part2,part3 = getWeightsOfSections(ship)
-    percentage = abs(weight2 - weight1)/max(weight2,weight1) * 100
+    el = [part1,part2,part3]
+    percentage1 = abs(el[0] - el[1])/max(el[0],el[1]) * 100
+    percentage2 = abs(el[2] - el[1])/max(el[2],el[1]) * 100
+    percentage3 = abs(el[0] - el[2])/max(el[0],el[2]) * 100
+    percentages = [percentage1,percentage2,percentage3]
+    okey = False
+    for el in percentages:
+        if el < 10: 
+            print("Stability between sides are not good")
+            okey = True
+        else: 
+            return False
+    return okey
+    
+     
 
 #TEST TASK 9
-print(getWeightArea(skip5[5]))
-print(getWeightArea(skip5[6]))
-print(getWeightArea(skip5[7]))
-print(getWeightArea(skip5[8]))
-print(getWeightArea(skip5[9]))
-print(getWeightArea(skip5[10]))
-getWeightofShip(skip5)
-getStabilitySide(skip5)
+# print(getWeightArea(skip5[5]))
+# print(getWeightArea(skip5[6]))
+# print(getWeightArea(skip5[7]))
+# print(getWeightArea(skip5[8]))
+# print(getWeightArea(skip5[9]))
+# print(getWeightArea(skip5[10]))
+# getWeightofShip(skip5)
+# getStabilitySide(skip5)
 ### PRINT SHIPS ###
 
-def fileFormatShip(ship):
-#      # id,lengde,egenvekt,loadvekt,totalvekt
-#[length, width, height, [], dict(), frontLeft, frontRight, midLeft, midRight, backLeft, backRight]
-    return str(ship[0]) + ' ' + str(ship[1]) + ' ' + str(ship[2]) + ' ' + str(ship[3]) + ' ' + str(ship[4]) + ' ' + str(ship[5]) + ' ' + str(ship[6]) + ' ' + str(ship[7]) + ' ' + str(ship[8]) + ' ' + str(ship[9])+ ' ' + str(ship[10])
+# TASK 6 #
+
+def fileFormatShip(container):
+#[length, width, height, [], dict(), frontLeft, frontRight, midLeft, midRight, backLeft, backRight
+    return str(container[0]) + ' ' + str(container[1]) + ' ' + str(container[2]) + ' ' + str(container[3]) + ' ' + str(container[4])  
 
 def writeShipToFile(ship):
     try:
        with open("dataStructures/loadShip.tsv", "w") as fp:
-            for container in ship:
+            for container in ship[3]:
                 formatedShip = fileFormatShip(container)
                 fp.write("%s\n" % formatedShip)
             fp.close()
     except:
          print("Could not write to file")
 
-def readShipFromFile(ship):
-    try:
-        with open("dataStructures/loadShip.tsv", "r") as fp:
-            ship = fp.read()
-            list = [ship.splitlines()]
-            for line in range(0, len(list)-1):
-                ship.append(line)
-            fp.close()
-    except:
-        print("Could not read file")
+# def loadShipFromFile(ship):
+#     try:
+#         with open("dataStructures/loadShip.tsv", "r") as fp:
+#             container = fp.read()
+#             list = [container.splitlines()]
+#             for line in list:
+#                 #ship[3].append(line)
+#                 loadContainerToShip(ship, line)
+#             fp.close()
+#             #return print(el)
+#     except:
+#         print("Could not read file")
 
 ###TEST TASK 6###
 skip5 = NewShip(24,22,18)
 randomContainers(containers)
 #print('hei')
 # while True:
-#     for cont in containers:
-#         loadContainerToShip(skip5,cont)
+#     for container in containers:
+#         loadContainerToShip(skip5, container)
 #     break
-print(skip5)
-writeShipToFile(skip5)
-
-
-
+#print(skip5)
+#writeShipToFile(skip5)
+#loadShipFromFile(skip5)
+#print(skip5)
 
 #Dette er en test
 
