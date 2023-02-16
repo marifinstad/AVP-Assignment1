@@ -464,11 +464,12 @@ def getStabilitySection(ship):
     percentages = [percentage1,percentage2,percentage3]
     okey = False
     for el in percentages:
-        if el < 10: 
+        if el < 9: 
             okey = True
         else: 
             print("Stability between sides are not good")
             return False
+    print("Stability between sections are good, they are: "+ str(percentages))
     return okey
 
 def checkStability(ship):
@@ -483,19 +484,15 @@ def checkStability(ship):
      
 
 #TEST TASK 9
-skip5 = NewShip(24,22,18)
+skip9 = NewShip(24,22,18)
 randomContainers(containers)
 while True:
     for cont in containers:
-        loadContainerToShip(skip5,cont)
+        loadContainerToShip(skip9,cont)
     break
-print(getWeightArea(skip5[5]))
-print(getWeightArea(skip5[6]))
-print(getWeightArea(skip5[7]))
-print(getWeightArea(skip5[8]))
-print(getWeightArea(skip5[9]))
-print(getWeightArea(skip5[10]))
-checkStability(skip5)
+for i in range (6):
+    print("Weight of section "+ str(i)+ " is : " + str(getWeightArea(skip9[5+i])))
+checkStability(skip9)
 
 ### PRINT SHIPS ###
 
