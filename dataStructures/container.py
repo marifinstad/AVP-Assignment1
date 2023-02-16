@@ -4,13 +4,13 @@ import random
 def NewContainer(id, length, cargo): #skal man ta inn en weight her også?
     #cargo er mengen av materialet den har med
     #listen med containere blir  [id, length, wighth, cargo]
-    if cargo < 0 or cargo > 23: 
+    if cargo < 0 or cargo > 23:
         return print("cannot load container due to over/under weight")
-    if length == 20: 
+    if length == 20:
         return [id, 20, 2, cargo]
-    elif length == 40: 
+    elif length == 40:
         return [id, 40, 4, cargo]
-    else: 
+    else:
         return ("could not obtain container")
 
 #Conatiner er nå en liste med info om en container
@@ -74,16 +74,16 @@ def checkID(id):
     for i in containers:
         if i[0] == id:
             return True
-    else: 
+    else:
         return False
-    
+
 #END OF TASK 2
 #TEST TASK 2
 
 
 #TASK 3
 def randomContainers(containers):
-    for i in range (0,1000):
+    for i in range (0,48):
         container = [0,0,0,0,0]
         id = i
         if checkID(id) == False:
@@ -134,7 +134,7 @@ def readContainersFromFile(containers):
             container = fp.read()
             list = [container.splitlines()]
             for line in range(0, len(list)-1):
-                containers.append(line) 
+                containers.append(line)
             fp.close()
     except:
         print("Could not read file")
@@ -146,7 +146,7 @@ def readContainersFromFile(containers):
 #readContainersFromFile(containers)
 
 
-#TASK 5 
+#TASK 5
 ### DETT ER SHIPS #####
 
 #implement of a new ship
@@ -157,7 +157,7 @@ def NewShip(length, width, height):
     midRight = [] #ship[8]
     backLeft = [] #ship[9]
     backRight = [] #ship[10]
-    for i in range(88):
+    for i in range(4):
         x = []
         y = []
         z = []
@@ -224,9 +224,9 @@ def numberOfContainersShips(ship):
     return len(getShipContainers(ship))
 
 
-#støttefunksjoner til dictionary 
+#støttefunksjoner til dictionary
 
-#inserts the conatiner into the i index in the list and the dict 
+#inserts the conatiner into the i index in the list and the dict
 def insertContainerOnShip(ship, container, i):
     #containers = getShipContainers(ship)
     #containers.insert(i,container)
@@ -270,27 +270,41 @@ def getWeightArea(area): #area = ship[6]
 
 #finds the lighets area
 def getLightestArea(ship):
-    FL = getWeightArea(ship[5])
-    FR = getWeightArea(ship[6])
-    ML = getWeightArea(ship[7])
-    MR = getWeightArea(ship[8])
-    BL = getWeightArea(ship[9])
-    BR = getWeightArea(ship[10])
-    dict = {5: FL, 6: FR, 7: ML, 8: MR, 9: BL, 10 : BR}
-    minArea = min(dict.values())
-    
-    for key, value in dict.items():
-        if value == minArea:
-            return key
+    # FL = getWeightArea(ship[5])
+    # FR = getWeightArea(ship[6])
+    # ML = getWeightArea(ship[7])
+    # MR = getWeightArea(ship[8])
+    # BL = getWeightArea(ship[9])
+    # BR = getWeightArea(ship[10])
+    # dict = {5: FL, 6: FR, 7: ML, 8: MR, 9: BL, 10 : BR}
+    # minArea = min(dict.values())
+
+    # for key, value in dict.items():
+    #     if value == minArea:
+    #         return key
+    areanr = 0
+    lettest = 10000000000000000
+    for i in range(6):
+        print(getWeightArea(ship[5+i]))
+        if getWeightArea(ship[5+i]) < lettest:
+            lettest = getWeightArea(ship[5+i])
+            areanr = 5 + i
+    print(lettest)
+    print(areanr)
+    return areanr
+
 
 #finds the lightest stack
 def getLightestStack(area):
     stacknr = 0
     lightest = 1000000000000
     for i in range(len(area)):
+    #    print(getWeightStack(area[i]))
         if getWeightStack(area[i]) < lightest:
-            stacknr = i
             lightest = getWeightStack(area[i])
+            stacknr = i
+    #print(lightest)
+    #print(stacknr)
     return stacknr #denne returner en indeks i som gjør at vi i et area vet at den letteste stacken er f.eks FrontLeft[i]
 
 
@@ -302,46 +316,25 @@ def loadContainerToShip(ship,container):
     newWeight = container[4]
     lightestArea = getLightestArea(ship)
     lightestStack = getLightestStack(ship[lightestArea])
+    print(str(lightestArea)+ ", "+ str(lightestStack))
+    print(str(getWeightStack(ship[lightestArea][lightestStack]))+ "\n")
     loaded = False
-    #det er denne det er noe rart med!!!!!
-    # for i in range(len(ship[lightestArea][lightestStack])):
-    #     oldWeight = getTotalWeightContainer(ship[lightestArea][lightestStack][i])         
-    #     if oldWeight <= newWeight:
-    #         #insertContainerOnShip
-    #         ship[lightestArea][lightestStack].insert(i,container)
-    #         ship[3].append(container)
-    #         addContainerToDict(ship,container)
-    #         loaded = True
-    #         break
 
-    #denne her sorterer den (desverre i motsatt rekkefølge av det vi vil ha + at det er noe galt i å velge letteste stack)
-    stack = ship[lightestArea][lightestStack]
-    i = len(ship[lightestArea][lightestStack])-1
-    if i != -1:
-            oldweight = stack[i][4]
-            if oldweight >= newWeight:
-                temp = stack.pop()
-                stack.append(temp)
-                stack.append(container)
-                loaded = True
-    if not loaded: 
+    if not loaded:
         ship[lightestArea][lightestStack].append(container)
         #ship[3].append(container)
         addContainerToDict(ship,container)
-    
+
 #### TEST 5
 skip5 = NewShip(24,22,18)
 randomContainers(containers)
 while True:
-    i = 0
-    while i < 600: 
         for cont in containers:
-            i += 1
             loadContainerToShip(skip5,cont)
-    for i in range (5):
-            print(skip5[5+i])
-    
-    break
+    # # for i in range (5):
+    # #         print(skip5[5+i])
+
+        break
 
 
 # #loads the container onto the ship if it is lighter than the container under
@@ -360,7 +353,7 @@ while True:
 #     if not loaded:
 #         appendContainerOnShip(ship, newContainer)
 
-# #checks if ship empty 
+# #checks if ship empty
 # def isEmptyShip(ship):
 #     return numberOfContainersShips(ship) == 0
 
@@ -382,7 +375,7 @@ def removeContainerFromShip(ship): #denne sletter den øverste containeren
         cont = getShipContainers(ship)
         container = cont.pop()
         removeContainerFromDict(ship,container)
-    return 
+    return
 
 #gets the container at the top of the list
 def getLastContainerOnShip(ship):
@@ -403,7 +396,7 @@ def removeLighterContainers(ship, weight):
 
 
 
-#TASK 9 
+#TASK 9
 def getWeightofShip(ship):
     weight = 0
     for i in range (5):
@@ -414,25 +407,25 @@ def getStabilitySide(ship):
     weight1 = 0
     weight2 = 0
     for i in range(6):
-        if (i+5)%2 != 0: 
+        if (i+5)%2 != 0:
             weight1 += getWeightArea(ship[5+i])
-        if (i+5)%2 == 0: 
+        if (i+5)%2 == 0:
             weight2 += getWeightArea(ship[5+i])
     percentage = abs(weight2 - weight1)/max(weight2,weight1) * 100
     if percentage <= 5:
         return print("The differenece bewteen the sides are: " + str(percentage))
-    else: 
+    else:
         return print(str(percentage))
 
-#TEST TASK 5 
-print(getWeightArea(skip5[5]))
-print(getWeightArea(skip5[6]))       
-print(getWeightArea(skip5[7]))
-print(getWeightArea(skip5[8]))
-print(getWeightArea(skip5[9]))
-print(getWeightArea(skip5[10]))
-getWeightofShip(skip5)
-getStabilitySide(skip5)
+#TEST TASK 5
+# print(getWeightArea(skip5[5]))
+# print(getWeightArea(skip5[6]))
+# print(getWeightArea(skip5[7]))
+# print(getWeightArea(skip5[8]))
+# print(getWeightArea(skip5[9]))
+# print(getWeightArea(skip5[10]))
+# getWeightofShip(skip5)
+# getStabilitySide(skip5)
 ### PRINT SHIPS ###
 
 # def fileFormatShip(ship):
@@ -455,7 +448,7 @@ getStabilitySide(skip5)
 # writeShipsToFile(ship)
 
 
-#Dette er en test 
+#Dette er en test
 
 #ship = NewShip(23, 22, 18)
 # c1 = NewContainer(1000, 20, 5)
