@@ -49,17 +49,14 @@ def setCargoContainer(container, cargo):
 #TEST 1
 # c1 = [0,0,0,0,0]
 # c2 = [0,0,0,0,0]
-# c3 = [0,0,0,0,0]
+# c3 = NewContainer(0000,40,20)
 # setIdContainer(c1,1)
 # setIdContainer(c2,2)
-# setIdContainer(c3,3)
-# setLengthContainer(c3,40)
 # setLengthContainer(c2,40)
 # setLengthContainer(c1,40)
 # setCargoContainer(c1,4)
 # setCargoContainer(c2,10)
-# setCargoContainer(c3,5)
-# task1 = [c1,c2,c3]
+# task1 = [c1,c2]
 # for q in task1:
 #     setWeigthContainer(q,4)
 #     getIdContainer(q)
@@ -67,7 +64,7 @@ def setCargoContainer(container, cargo):
 #     getWeigtContainer(q)
 #     getLengthContainer(q)
 #     getTotalWeightContainer(q)
-# print(task1)
+# print(task1,c3)
 
 
 #TASK 2
@@ -98,14 +95,22 @@ def checkID(id):
 
 #END OF TASK 2
 #TEST TASK 2
-
+# containertest2= NewContainer(1234,40,2)
+# print(containers)
+# if checkID(containertest2[0]) == False: 
+#     addContainer(containertest2)
+#     print(containers)
+#     if findContainer(containertest2) == True:
+#         removeContainer(containertest2)
+#         print(containers)
 
 #TASK 3
 def randomContainers(containers):
-    for i in range (0,10):
-         #id = i This gives us an increasing index
+    for i in range (0,50):
+        id = i 
+         #This gives us an increasing index
         container = [0,0,0,0,0]
-        id = random.randint(0,100000)
+        #id = random.randint(0,100000)
         if checkID(id) == False:
             setIdContainer(container, id)
             cargo = random.randint(0,23)
@@ -127,18 +132,18 @@ def randomContainers(containers):
 #END OF TASK 3
 
 #TEST TASK 3
-randomContainers(containers)
-#print(containers)
+# randomContainers(containers)
+# print(containers)
 
 #TASK 4
 #Lage det om til filformat
 def fileFormatContainer(container):
-     # id, length, unladen weight, loadweight ,total weight
+     # id, length, unloaded weight, loadedweight ,total weight
     return str(container[0])+","+str(container[1])+","+str(container[2])+","+str(container[3])+","+str(getTotalWeightContainer(container))
 
 def writeContainersToFile(containers):
     try:
-        with open("load.csv", "w") as fp:
+        with open("dataStructures/load.csv", "w") as fp:
             for container in containers:
                 formatedContainer = fileFormatContainer(container)
                 fp.write("%s\n" % formatedContainer)
@@ -148,7 +153,7 @@ def writeContainersToFile(containers):
 
 def readContainersFromFile(containers):
     try:
-        with open("load.csv", "r") as fp:
+        with open("dataStructures/load.csv", "r") as fp:
             empty = []
             container = csv.reader(fp)
             for row in container: 
@@ -164,14 +169,14 @@ def readContainersFromFile(containers):
 
 #TEST TASK 4
 
-#writeContainersToFile(containers)
+# randomContainers(containers)
+# writeContainersToFile(containers)
 # readContainersFromFile(containers)
 # print(containers)
 
 
 
 #TASK 5 AND 7 AND 8
-### THIS IS SHIPS #####
 
 #implement of a new ship
 def NewShip(length, width, height):
@@ -356,60 +361,20 @@ def unloadContainers(ship):
         removeContainerFromDict(ship,container)
         ship[3].remove(container)
 
-    removedContainers = []
+removedContainers = []
+
 #### TEST 5
 # skip5 = NewShip(24,22,18)
 # randomContainers(containers)
 # while True:
 #     for cont in containers:
 #         loadContainerToShip(skip5,cont)
-#     # # for i in range (5):
-#     # #         print(skip5[5+i])
-
-#     #unloadContainers(skip5)
+#     for i in range (5):
+#         print(skip5[5+i])
+#     unloadContainers(skip5)
+#     for i in range (5):
+#             print(skip5[5+i])
 #     break
-
-##########################   NEED TO CHECK IF WE NEED THESE   ##########################################
-# #checks if ship empty
-# def isEmptyShip(ship):
-#     return numberOfContainersShips(ship) == 0
-
-#add container to list on ship
-# def addContainerToShip(ship,container):
-#     cont = getShipContainers(ship)
-#     cont.append(container)
-#     addContainerToDict(ship, container)
-
-# #add containers list to ship
-# def addContainersToShip(ship, cont):
-#     while len(cont) != 0:
-#         container = cont.pop()
-#         addContainerToShip(ship, container)
-
-#deletes container from list on ship
-# def removeContainerFromShip(ship): #denne sletter den øverste containeren
-#     if numberOfContainersShips(ship) != 0:
-#         cont = getShipContainers(ship)
-#         container = cont.pop()
-#         removeContainerFromDict(ship,container)
-#     return
-
-#gets the container at the top of the list
-# def getLastContainerOnShip(ship):
-#     if numberOfContainersShips != 0:
-#         return containers[-1]
-#     return None
-
-# def removeLighterContainers(ship, weight):
-#     removedContainers = []
-#     while not isEmptyShip(ship):
-#         container = getLastContainerOnShip(ship)
-#         totalWeight = getTotalWeightContainer(container)
-#         if totalWeight >= weight:
-#             break
-#         removeContainer(ship)
-#         removedContainers.append(container)
-#     return removedContainers
 
 # TASK 6 #
 
@@ -419,7 +384,7 @@ def fileFormatShip(container):
 
 def writeShipToFile(ship):
     try:
-       with open("loadShip.tsv", "w") as fp:
+       with open("dataStructures/loadShip.tsv", "w") as fp:
             for container in ship[3]:
                 formatedShip = fileFormatShip(container)
                 fp.write("%s\n" % formatedShip)
@@ -429,7 +394,7 @@ def writeShipToFile(ship):
 
 def loadShipFromFile(ship):
     try:
-        with open("loadShip.tsv", "r") as fp:
+        with open("dataStructures/loadShip.tsv", "r") as fp:
             empty = []
             container = csv.reader(fp)
             for row in container:
@@ -525,35 +490,35 @@ def checkStability(ship):
      
 
 #TEST TASK 9
-skip9 = NewShip(24,22,18)
-randomContainers(containers)
-while True:
-    for cont in containers:
-        loadContainerToShip(skip9,cont)
-    break
-print("           /\          ")
-print("          /  \         ")
-print("_______________________")
-print("|section 1:|section 2: ")
-print("|       "+ str(getWeightArea(skip9[5]))+ "|        "+str(getWeightArea(skip9[6]))+ "|")
-print("_______________________")
-print("|section 3:|section 4: ")
-print("|       "+ str(getWeightArea(skip9[7]))+ "|        "+str(getWeightArea(skip9[8]))+ "|")
-print("_______________________")
-print("|section 5:|section 6: ")
-print("|       "+ str(getWeightArea(skip9[9]))+ "|        " +str(getWeightArea(skip9[10]))+ "|")
-print("_______________________")
-for i in range (6):
-    print("Weight of section "+ str(i)+ " is : " + str(getWeightArea(skip9[5+i])))
-checkStability(skip9)
+# skip9 = NewShip(24,22,18)
+# randomContainers(containers)
+# while True:
+#     for cont in containers:
+#         loadContainerToShip(skip9,cont)
+#     break
+# print("           /\          ")
+# print("          /  \         ")
+# print("_______________________")
+# print("|section 1:|section 2: ")
+# print("|       "+ str(getWeightArea(skip9[5]))+ "|        "+str(getWeightArea(skip9[6]))+ "|")
+# print("_______________________")
+# print("|section 3:|section 4: ")
+# print("|       "+ str(getWeightArea(skip9[7]))+ "|        "+str(getWeightArea(skip9[8]))+ "|")
+# print("_______________________")
+# print("|section 5:|section 6: ")
+# print("|       "+ str(getWeightArea(skip9[9]))+ "|        " +str(getWeightArea(skip9[10]))+ "|")
+# print("_______________________")
+# for i in range (6):
+#     print("Weight of section "+ str(i)+ " is : " + str(getWeightArea(skip9[5+i])))
+# checkStability(skip9)
 
 ### PRINT SHIPS ###
 
 #TASK 11
-def test11(liste):
-    return print("It takes "+str(len(liste)*4)+" minutes to load the container to the ship")
+def loadTime(containers):
+    return print("It takes "+str(len(containers)*4)+" minutes to load the container to the ship")
     
 #TEST 11
 # randomContainers(containers)
-# test11(containers)
+# loadTime(containers)
 
